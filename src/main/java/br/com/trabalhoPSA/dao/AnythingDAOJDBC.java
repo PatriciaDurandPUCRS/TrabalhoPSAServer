@@ -1,0 +1,71 @@
+package br.com.trabalhoPSA.dao;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.sql.DataSource;
+import java.util.List;
+
+@Repository("AnythingDAO")
+@Transactional
+public class AnythingDAOJDBC implements AnythingDAO {
+
+    @Autowired
+//    private FuncionarioDAO funcionarioDAO;
+    private DataSource dataSource;
+    private JdbcTemplate jdbcTemplateObject;
+
+    @Override
+    public void buscarAnything(DataSource dataSource) {
+        this.dataSource = dataSource;
+        this.jdbcTemplateObject = new JdbcTemplate(dataSource);
+    }
+
+//    @Override
+//    public String salvar(Area area) {
+//        String SQL = "INSERT INTO AREA (NOME) VALUES (?)";
+//        jdbcTemplateObject.update(SQL, area.getNome());
+//        return "Área " + area.getNome() + " salva com sucesso!!";
+//    }
+//
+//    @Override
+//    public List<Area> listar() {
+//        String SQL = "SELECT * FROM AREA";
+//        List <Area> areas = jdbcTemplateObject.query(SQL, new AreaMapper());
+//        return areas;
+//    }
+//
+//    @Override
+//    public Area buscarPorCodigo(int codigo){
+//        String SQL = "SELECT * FROM AREA WHERE ID = ?";
+//        Area area = jdbcTemplateObject.queryForObject(SQL, new Object[]{codigo}, new AreaMapper());
+//        return area;
+//    }
+//
+//    @Override
+//    public String deletar(int codigo) throws Exception {
+//        String area = buscarPorCodigo(codigo).getNome();
+//        try {
+//            String SQL = "DELETE FROM AREA WHERE ID = ?";
+//            jdbcTemplateObject.update(SQL, codigo);
+//            return "Área " + area + " deletada com sucesso!!";
+//        } catch (Exception e){
+//            throw new Exception("Não foi possível deletar a área " + area + " porque existe funcionários associados a ela.");
+//        }
+//    }
+//
+//    @Override
+//    public String deletarCascata(int codigo){
+//        List<Funcionario> listaFuncionarios = funcionarioDAO.listarPorArea(codigo);
+//        String area = buscarPorCodigo(codigo).getNome();
+//        for (Funcionario funcionario : listaFuncionarios) {
+//            funcionarioDAO.deletar(funcionario.getCodigo());
+//        }
+//        String SQL = "DELETE FROM AREA WHERE ID = ?";
+//        jdbcTemplateObject.update(SQL, codigo);
+//        return "Área " + area + " deletada com sucesso!!";
+//    }
+
+}

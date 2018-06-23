@@ -1,0 +1,22 @@
+.idea
+.vscode
+.sts4-cache
+build
+bin
+*.iml
+*.iws
+.gradle/
+gradle
+gradlew
+gradlew.bat
+out
+
+site.min.css
+
+# Log file
+*.log
+logs/
+
+coverage/
+.DS_Store
+.project
