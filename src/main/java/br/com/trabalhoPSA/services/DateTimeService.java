@@ -3,7 +3,7 @@ package br.com.trabalhoPSA.services;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class HourService {
+public class DateTimeService {
 
     private DateTimeFormatter data = DateTimeFormatter.ofPattern("yyyy/MM/dd");
     private DateTimeFormatter horario = DateTimeFormatter.ofPattern("HH:mm:ss");

@@ -1,12 +1,15 @@
 package br.com.trabalhoPSA.entity;
 
-public class AutenticacaoPayload {
+@Entity
+public class LoginPayload {
 
+    @Id
+    @Column(nullable = false)
     public String user;
-
+    @Column(nullable = false)
     public String password;
 
-    public AutenticacaoPayload() {
+    public LoginPayload() {
     }
 
     public String getUser() {

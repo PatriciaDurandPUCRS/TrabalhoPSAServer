@@ -6,11 +6,10 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
-import java.util.List;
 
-@Repository("AnythingDAO")
+@Repository("AuthenticateDAO")
 @Transactional
-public class AnythingDAOJDBC implements AnythingDAO {
+public class AuthenticateDAOJDBC implements AuthenticateDAO {
 
     @Autowired
 //    private FuncionarioDAO funcionarioDAO;
@@ -18,18 +17,18 @@ public class AnythingDAOJDBC implements AnythingDAO {
     private JdbcTemplate jdbcTemplateObject;
 
     @Override
-    public void buscarAnything(DataSource dataSource) {
+    public ResponseEntity autenticar(DataSource dataSource) {
         this.dataSource = dataSource;
         this.jdbcTemplateObject = new JdbcTemplate(dataSource);
     }
 
-//    @Override
-//    public String salvar(Area area) {
-//        String SQL = "INSERT INTO AREA (NOME) VALUES (?)";
-//        jdbcTemplateObject.update(SQL, area.getNome());
-//        return "Área " + area.getNome() + " salva com sucesso!!";
-//    }
-//
+    @Override
+    public ResponseEntity salvar(LoginPayload login) {
+        String SQL = "INSERT INTO AREA (NOME) VALUES (?)";
+        jdbcTemplateObject.update(SQL, area.getNome());
+        return "Área " + area.getNome() + " salva com sucesso!!";
+    }
+
 //    @Override
 //    public List<Area> listar() {
 //        String SQL = "SELECT * FROM AREA";
