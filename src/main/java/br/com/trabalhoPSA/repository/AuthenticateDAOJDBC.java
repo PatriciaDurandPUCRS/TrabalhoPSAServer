@@ -1,6 +1,10 @@
-package br.com.trabalhoPSA.dao;
+package br.com.trabalhoPSA.repository;
 
+import br.com.trabalhoPSA.entity.LoginPayload;
+import br.com.trabalhoPSA.mapper.AuthenticateMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,21 +16,37 @@ import javax.sql.DataSource;
 public class AuthenticateDAOJDBC implements AuthenticateDAO {
 
     @Autowired
-//    private FuncionarioDAO funcionarioDAO;
+    private AuthenticateDAO AuthenticateDAO;
     private DataSource dataSource;
     private JdbcTemplate jdbcTemplateObject;
 
     @Override
-    public ResponseEntity autenticar(DataSource dataSource) {
-        this.dataSource = dataSource;
-        this.jdbcTemplateObject = new JdbcTemplate(dataSource);
+    public ResponseEntity autenticar(LoginPayload loginPayload) {
+        loginPayload.setPassword("admin");
+        loginPayload.setUser("admin");
+
+        HttpStatus status = HttpStatus.OK;
+        try {
+            String SQL = "SELECT * FROM LOGIN WHERE USER = ?";
+            LoginPayload login = jdbcTemplateObject.queryForObject(SQL, new Object[]{loginPayload.getUser()}, new AuthenticateMapper());
+            if(!login.getPassword().equals(loginPayload.getPassword())) {
+                status = HttpStatus.UNAUTHORIZED;
+            }
+        } catch (Exception e) {
+            status = HttpStatus.BAD_REQUEST;
+        }
+        return new ResponseEntity(null, null, status);
     }
 
     @Override
     public ResponseEntity salvar(LoginPayload login) {
-        String SQL = "INSERT INTO AREA (NOME) VALUES (?)";
-        jdbcTemplateObject.update(SQL, area.getNome());
-        return "Área " + area.getNome() + " salva com sucesso!!";
+        String SQL = "INSERT INTO LOGIN (USER, PASSWORD) VALUES (?, ?)";
+
+        jdbcTemplateObject.update(SQL, login.getUser());
+        jdbcTemplateObject.update(SQL, login.getPassword());
+
+
+        return new ResponseEntity(null, null, HttpStatus.OK);
     }
 
 //    @Override

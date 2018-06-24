@@ -1,7 +1,7 @@
 package br.com.trabalhoPSA.services;
 
-import br.com.trabalhoPSA.entity.Ticket;
 import br.com.trabalhoPSA.entity.AcessoFactory;
+import br.com.trabalhoPSA.entity.Ticket;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -9,9 +9,9 @@ import org.springframework.stereotype.Service;
 public class TicketService {
 
     public Ticket getTicket(String codigo, String tipoAcesso) {
-        HourService hourService = new HourService();
-        String date = hourService.getDate();
-        String hour = hourService.getHour();
+        DateTimeService dateTimeService = new DateTimeService();
+        String date = dateTimeService.getDate();
+        String hour = dateTimeService.getHour();
 
         AcessoFactory acesso = new AcessoFactory();
         acesso.getAcesso(tipoAcesso);

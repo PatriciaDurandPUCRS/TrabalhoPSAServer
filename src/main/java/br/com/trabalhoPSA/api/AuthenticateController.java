@@ -1,14 +1,14 @@
 package br.com.trabalhoPSA.api;
 
-import br.com.trabalhoPSA.entity.AutenticacaoPayload;
+import br.com.trabalhoPSA.entity.LoginPayload;
 import br.com.trabalhoPSA.services.AuthenticateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(value = "/autenticacao")
-public class AutenticacaoController {
+@RequestMapping(value = "/authenticate")
+public class AuthenticateController {
 
     @Autowired
     public AuthenticateService authenticateService;
@@ -19,7 +19,7 @@ public class AutenticacaoController {
     }
 
     @PostMapping("/adicionar")
-    public ResponseEntity autenticar(@RequestBody AutenticacaoPayload payload){
+    public ResponseEntity adicionar(@RequestBody LoginPayload payload){
         return authenticateService.adicionar(payload);
     }
 

@@ -1,4 +1,4 @@
-package br.com.trabalhoPSA.dao;
+package br.com.trabalhoPSA.mapper;
 
 import br.com.trabalhoPSA.entity.LoginPayload;
 import java.sql.ResultSet;
@@ -10,7 +10,8 @@ public class AuthenticateMapper implements RowMapper<LoginPayload> {
 
     public LoginPayload mapRow(ResultSet rs, int rowNum) throws SQLException {
         LoginPayload login = new LoginPayload();
-        login.setNome(rs.getString(2));
+        login.setUser(rs.getString(1));
+        login.setPassword(rs.getString(2));
         return login;
     }
 
