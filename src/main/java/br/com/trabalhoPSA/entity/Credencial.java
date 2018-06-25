@@ -1,13 +1,10 @@
 package br.com.trabalhoPSA.entity;
 
-public class LoginPayload {
+public class Credencial {
 
     public String user;
 
     public String password;
-
-    public LoginPayload() {
-    }
 
     public String getUser() {
         return user;

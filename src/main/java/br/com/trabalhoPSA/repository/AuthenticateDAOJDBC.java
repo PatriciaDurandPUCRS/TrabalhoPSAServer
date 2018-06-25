@@ -1,49 +1,41 @@
 package br.com.trabalhoPSA.repository;
 
-import br.com.trabalhoPSA.entity.LoginPayload;
+import br.com.trabalhoPSA.entity.Credencial;
 import br.com.trabalhoPSA.mapper.AuthenticateMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.sql.DataSource;
 
 @Repository("AuthenticateDAO")
 @Transactional
 public class AuthenticateDAOJDBC implements AuthenticateDAO {
 
-    @Autowired
-    private AuthenticateDAO AuthenticateDAO;
-    private DataSource dataSource;
-    private JdbcTemplate jdbcTemplateObject;
+    private DataSourceObject dataSourceObject = new DataSourceObject();
 
     @Override
-    public ResponseEntity autenticar(LoginPayload loginPayload) {
-        loginPayload.setPassword("admin");
-        loginPayload.setUser("admin");
-
+    public ResponseEntity autenticar(Credencial credencial) {
+        System.out.println("Entrou");
         HttpStatus status = HttpStatus.OK;
         try {
             String SQL = "SELECT * FROM LOGIN WHERE USER = ?";
-            LoginPayload login = jdbcTemplateObject.queryForObject(SQL, new Object[]{loginPayload.getUser()}, new AuthenticateMapper());
-            if(!login.getPassword().equals(loginPayload.getPassword())) {
+            Credencial login = dataSourceObject.getDataSource().queryForObject(SQL, new Object[]{credencial.getUser()}, new AuthenticateMapper());
+            if(!login.getPassword().equals(credencial.getPassword())) {
                 status = HttpStatus.UNAUTHORIZED;
             }
         } catch (Exception e) {
+            System.out.println(e);
             status = HttpStatus.BAD_REQUEST;
         }
         return new ResponseEntity(null, null, status);
     }
 
     @Override
-    public ResponseEntity salvar(LoginPayload login) {
+    public ResponseEntity salvar(Credencial login) {
         String SQL = "INSERT INTO LOGIN (USER, PASSWORD) VALUES (?, ?)";
 
-        jdbcTemplateObject.update(SQL, login.getUser());
-        jdbcTemplateObject.update(SQL, login.getPassword());
+        dataSourceObject.getDataSource().update(SQL, login.getUser());
+        dataSourceObject.getDataSource().update(SQL, login.getPassword());
 
 
         return new ResponseEntity(null, null, HttpStatus.OK);
