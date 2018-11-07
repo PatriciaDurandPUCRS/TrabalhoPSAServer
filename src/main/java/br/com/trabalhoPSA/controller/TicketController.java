@@ -1,4 +1,4 @@
-package br.com.trabalhoPSA.api;
+package br.com.trabalhoPSA.controller;
 
 import br.com.trabalhoPSA.entity.Ticket;
 import br.com.trabalhoPSA.services.TicketService;

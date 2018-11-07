@@ -2,24 +2,35 @@ package br.com.trabalhoPSA.repository;
 
 import br.com.trabalhoPSA.entity.Credencial;
 import br.com.trabalhoPSA.mapper.AuthenticateMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.sql.DataSource;
+
 @Repository("AuthenticateDAO")
 @Transactional
-public class AuthenticateDAOJDBC implements AuthenticateDAO {
+public class AuthenticateDAOImplement implements AuthenticateDAO {
 
-    private DataSourceObject dataSourceObject = new DataSourceObject();
+    @Autowired
+    private DataSource dataSource;
+    private JdbcTemplate jdbcTemplateObject;
+
+    @Override
+    public void setDataSource(DataSource dataSource) {
+        this.dataSource = dataSource;
+        this.jdbcTemplateObject = new JdbcTemplate(dataSource);
+    }
 
     @Override
     public ResponseEntity autenticar(Credencial credencial) {
-        System.out.println("Entrou");
         HttpStatus status = HttpStatus.OK;
         try {
             String SQL = "SELECT * FROM LOGIN WHERE USER = ?";
-            Credencial login = dataSourceObject.getDataSource().queryForObject(SQL, new Object[]{credencial.getUser()}, new AuthenticateMapper());
+            Credencial login = jdbcTemplateObject.queryForObject(SQL, new Object[]{credencial.getUser()}, new AuthenticateMapper());
             if(!login.getPassword().equals(credencial.getPassword())) {
                 status = HttpStatus.UNAUTHORIZED;
             }
@@ -32,12 +43,15 @@ public class AuthenticateDAOJDBC implements AuthenticateDAO {
 
     @Override
     public ResponseEntity salvar(Credencial login) {
-        String SQL = "INSERT INTO LOGIN (USER, PASSWORD) VALUES (?, ?)";
+        HttpStatus status = HttpStatus.OK;
+        try {
+            String SQL = "INSERT INTO LOGIN (USER, PASSWORD) VALUES (?, ?)";
 
-        dataSourceObject.getDataSource().update(SQL, login.getUser());
-        dataSourceObject.getDataSource().update(SQL, login.getPassword());
-
-
+            jdbcTemplateObject.update(SQL, login.getUser(), login.getPassword());
+        } catch (Exception e) {
+            System.out.println(e);
+            status = HttpStatus.BAD_REQUEST;
+        }
         return new ResponseEntity(null, null, HttpStatus.OK);
     }
 
