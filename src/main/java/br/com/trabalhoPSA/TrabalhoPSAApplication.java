@@ -8,10 +8,10 @@ import org.springframework.web.filter.CorsFilter;
 import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
-public class TrabalhooPSAApplication {
+public class TrabalhoPSAApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(TrabalhooPSAApplication.class, args);
+		SpringApplication.run(TrabalhoPSAApplication.class, args);
     }
     
     @Bean
