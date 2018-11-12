@@ -30,24 +30,21 @@ public class AutenticacaoDAOImplement implements AutenticacaoDAO {
     @Override
     public ResponseEntity<Credencial> autenticar(Credencial credencial) {
         setDataSource();
-        HttpStatus status = HttpStatus.OK;
+        HttpStatus status = HttpStatus.BAD_REQUEST;
         Credencial login = null;
 
         try {
             String SQL = "SELECT * FROM LOGIN WHERE `USER` = ?";
             login = jdbcTemplateObject.queryForObject(SQL, new Object[]{credencial.getUser()}, new AutenticacaoMapper());
-            if(!login.getPassword().equals(credencial.getPassword())) {
-                status = HttpStatus.UNAUTHORIZED;
-            }
+            status = (login.getPassword().equals(credencial.getPassword())) ? HttpStatus.OK : HttpStatus.UNAUTHORIZED;
         } catch (Exception e) {
             System.out.println(e);
-            status = HttpStatus.BAD_REQUEST;
         }
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("Content-Type", "application/json");
 
-        return new ResponseEntity(login, headers, status);
+        return new ResponseEntity(null, headers, status);
     }
 
     @Override

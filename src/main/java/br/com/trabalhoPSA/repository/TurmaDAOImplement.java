@@ -3,6 +3,7 @@ package br.com.trabalhoPSA.repository;
 import br.com.trabalhoPSA.entity.Turma;
 import br.com.trabalhoPSA.mapper.TurmaMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -21,27 +22,29 @@ public class TurmaDAOImplement implements TurmaDAO {
     private JdbcTemplate jdbcTemplateObject;
 
     @Override
-    public void setDataSource(DataSource dataSource) {
-        this.dataSource = dataSource;
+    public void setDataSource() {
         this.jdbcTemplateObject = new JdbcTemplate(dataSource);
     }
 
     @Override
-    public ResponseEntity listar() {
-        HttpStatus status = HttpStatus.OK;
+    public ResponseEntity<List<Turma>> listar() {
+        setDataSource();
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        List<Turma> turma = null;
 
         try {
             String SQL = "SELECT * FROM TURMA";
-            List<Turma> turma = jdbcTemplateObject.query(SQL, new TurmaMapper());
-            System.out.println(turma.toString());
-//            if(!login.getPassword().equals(credencial.getPassword())) {
-//                status = HttpStatus.UNAUTHORIZED;
-//            }
+            turma = jdbcTemplateObject.query(SQL, new TurmaMapper());
+            System.out.println(turma);
+            status = HttpStatus.OK;
         } catch (Exception e) {
             System.out.println(e);
-            status = HttpStatus.BAD_REQUEST;
         }
-        return new ResponseEntity(null, null, status);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Content-Type", "application/json");
+
+        return new ResponseEntity(turma, null, status);
     }
 
 }
