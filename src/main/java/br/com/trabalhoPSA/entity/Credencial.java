@@ -21,4 +21,12 @@ public class Credencial {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    @Override
+    public String toString() {
+        return "Credencial{" +
+                "user='" + user + '\'' +
+                ", password='" + password + '\'' +
+                '}';
+    }
 }

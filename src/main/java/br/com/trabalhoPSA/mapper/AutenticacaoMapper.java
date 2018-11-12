@@ -7,7 +7,7 @@ import java.sql.SQLException;
 
 import org.springframework.jdbc.core.RowMapper;
 
-public class AuthenticateMapper implements RowMapper<Credencial> {
+public class AutenticacaoMapper implements RowMapper<Credencial> {
 
     public Credencial mapRow(ResultSet rs, int rowNum) throws SQLException {
         Credencial login = new Credencial();

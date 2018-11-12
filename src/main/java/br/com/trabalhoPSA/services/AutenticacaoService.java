@@ -1,19 +1,21 @@
 package br.com.trabalhoPSA.services;
 
 import br.com.trabalhoPSA.entity.Credencial;
-import br.com.trabalhoPSA.repository.AuthenticateDAO;
+import br.com.trabalhoPSA.repository.AutenticacaoDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.sql.DataSource;
+
 @Service
-public class AuthenticateService extends BaseService {
+public class AutenticacaoService {
 
     @Autowired
-    AuthenticateDAO authenticateDAO;
+    AutenticacaoDAO autenticacaoDAO;
 
-    public ResponseEntity autenticar(Credencial payload){
-        return authenticateDAO.autenticar(payload);
+    public ResponseEntity<Credencial> autenticar(Credencial payload){
+        return autenticacaoDAO.autenticar(payload);
     }
 
     public ResponseEntity adicionar(Credencial payload){
@@ -23,7 +25,7 @@ public class AuthenticateService extends BaseService {
 //        } else {
 //            status = HttpStatus.UNAUTHORIZED;
 //        }
-        return authenticateDAO.salvar(payload);
+        return autenticacaoDAO.salvar(payload);
     }
 
 }
