@@ -40,8 +40,6 @@ public class MatriculaService {
             Set<String> conjCodcredConcluido  = getConjCodCredConcluido(matricula);
             Map<String, Set<String>> mapPreRequisitos = getMapPreRequisitos();
 
-            System.out.println(listarTurmas.toString());
-
             for (Turma t : listarTurmas) {
                 if(!conjCodcredConcluido.contains(t.getCodCred())) {
                     if(mapPreRequisitos.containsKey(t.getCodCred())) {
@@ -55,7 +53,6 @@ public class MatriculaService {
                 }
             }
             status = HttpStatus.OK;
-            System.out.println(listaTurmaDisponiveis.toString());
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -74,7 +71,7 @@ public class MatriculaService {
     }
 
     private Set<String> getConjCodCredConcluido(String matricula) {
-        List<String> listCodcred = null
+        List<String> listCodcred = null;
         try {
             listCodcred = historicoDAO.listar(matricula);
         } catch (Exception e) {
