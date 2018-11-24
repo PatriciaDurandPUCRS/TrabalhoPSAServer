@@ -18,9 +18,4 @@ public class AutenticacaoController {
         return autenticacaoService.autenticar(payload);
     }
 
-    @PostMapping("/adicionar")
-    public ResponseEntity adicionar(@RequestBody Credencial payload){
-        return autenticacaoService.adicionar(payload);
-    }
-
 }

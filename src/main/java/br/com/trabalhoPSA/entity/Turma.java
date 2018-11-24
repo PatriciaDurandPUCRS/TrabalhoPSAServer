@@ -2,15 +2,15 @@ package br.com.trabalhoPSA.entity;
 
 public class Turma {
 
-    public String codCred;
+    private String codCred;
 
-    public String turma;
+    private String turma;
 
-    public String disciplina;
+    private String disciplina;
 
-    public String qtd;
+    private String qtd;
 
-    public String horario;
+    private String horario;
 
     public Turma() {
     }

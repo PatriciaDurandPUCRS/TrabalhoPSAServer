@@ -3,14 +3,9 @@ package br.com.trabalhoPSA.repository;
 import br.com.trabalhoPSA.entity.Credencial;
 import br.com.trabalhoPSA.mapper.AutenticacaoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.sql.DataSource;
 
@@ -28,38 +23,31 @@ public class AutenticacaoDAOImplement implements AutenticacaoDAO {
     }
 
     @Override
-    public ResponseEntity<Credencial> autenticar(Credencial credencial) {
+    public boolean autenticar(Credencial credencial) {
         setDataSource();
-        HttpStatus status = HttpStatus.BAD_REQUEST;
-        Credencial login = null;
-
         try {
             String SQL = "SELECT * FROM LOGIN WHERE `USER` = ?";
-            login = jdbcTemplateObject.queryForObject(SQL, new Object[]{credencial.getUser()}, new AutenticacaoMapper());
-            status = (login.getPassword().equals(credencial.getPassword())) ? HttpStatus.OK : HttpStatus.UNAUTHORIZED;
+            Credencial login = jdbcTemplateObject.queryForObject(SQL, new Object[]{credencial.getUser()}, new AutenticacaoMapper());
+            return (login.getPassword().equals(credencial.getPassword()));
         } catch (Exception e) {
             System.out.println(e);
+            return false;
         }
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Content-Type", "application/json");
-
-        return new ResponseEntity(null, headers, status);
     }
 
-    @Override
-    public ResponseEntity salvar(Credencial login) {
-        HttpStatus status = HttpStatus.OK;
-        try {
-            String SQL = "INSERT INTO LOGIN (USER, PASSWORD) VALUES (?, ?)";
-
-            jdbcTemplateObject.update(SQL, login.getUser(), login.getPassword());
-        } catch (Exception e) {
-            System.out.println(e);
-            status = HttpStatus.BAD_REQUEST;
-        }
-        return new ResponseEntity(null, null, HttpStatus.OK);
-    }
+//    @Override
+//    public ResponseEntity salvar(Credencial login) {
+//        HttpStatus status = HttpStatus.OK;
+//        try {
+//            String SQL = "INSERT INTO LOGIN (USER, PASSWORD) VALUES (?, ?)";
+//
+//            jdbcTemplateObject.update(SQL, login.getUser(), login.getPassword());
+//        } catch (Exception e) {
+//            System.out.println(e);
+//            status = HttpStatus.BAD_REQUEST;
+//        }
+//        return new ResponseEntity(null, BaseService.getHeders(), HttpStatus.OK);
+//    }
 
 //    @Override
 //    public List<Area> listar() {

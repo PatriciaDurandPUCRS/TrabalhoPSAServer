@@ -1,13 +1,11 @@
 package br.com.trabalhoPSA.repository;
 
-import br.com.trabalhoPSA.entity.Turma;
-
 import java.util.List;
 
-public interface TurmaDAO {
+public interface HistoricoDAO {
 
     void setDataSource();
 
-    List<Turma> listar();
+    List<String> listar(String matricula);
 
 }

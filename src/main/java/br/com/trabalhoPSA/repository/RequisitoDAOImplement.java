@@ -1,7 +1,7 @@
 package br.com.trabalhoPSA.repository;
 
-import br.com.trabalhoPSA.entity.Turma;
-import br.com.trabalhoPSA.mapper.TurmaMapper;
+import br.com.trabalhoPSA.entity.Requisito;
+import br.com.trabalhoPSA.mapper.RequisitoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -10,9 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.sql.DataSource;
 import java.util.List;
 
-@Repository("TurmaDAO")
+@Repository("RequisitoDAO")
 @Transactional
-public class TurmaDAOImplement implements TurmaDAO {
+public class RequisitoDAOImplement implements RequisitoDAO {
 
     @Autowired
     private DataSource dataSource;
@@ -24,18 +24,17 @@ public class TurmaDAOImplement implements TurmaDAO {
     }
 
     @Override
-    public List<Turma> listar() {
+    public List<Requisito> listar() {
         setDataSource();
-        List<Turma> turma = null;
+        List<Requisito> requisitos = null;
 
         try {
-            String SQL = "SELECT * FROM TURMA";
-            turma = jdbcTemplateObject.query(SQL, new TurmaMapper());
+            String SQL = "SELECT * FROM REQUISITO";
+            requisitos = jdbcTemplateObject.query(SQL, new RequisitoMapper());
         } catch (Exception e) {
             System.out.println(e);
         }
 
-        return turma;
+        return requisitos;
     }
-
 }
