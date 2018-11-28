@@ -44,7 +44,7 @@ public class MatriculaService {
                 if(!conjCodcredConcluido.contains(t.getCodCred())) {
                     if(mapPreRequisitos.containsKey(t.getCodCred())) {
                         Set<String> preRequisitos = mapPreRequisitos.get(t.getCodCred());
-                        if ((preRequisitos.containsAll(conjCodcredConcluido))) {
+                        if ((conjCodcredConcluido.containsAll(preRequisitos))) {
                             listaTurmaDisponiveis.add(t);
                         }
                     } else {
