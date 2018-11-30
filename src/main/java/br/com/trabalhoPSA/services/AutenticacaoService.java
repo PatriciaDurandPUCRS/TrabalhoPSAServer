@@ -13,9 +13,12 @@ public class AutenticacaoService {
     @Autowired
     AutenticacaoDAO autenticacaoDAO;
 
-    public ResponseEntity<Credencial> autenticar(Credencial payload){
-        HttpStatus status = autenticacaoDAO.autenticar(payload) ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
-        return new ResponseEntity(BaseService.getHeders(), status) ;
+    @Autowired
+    private HashingService hashingService;
+
+    public ResponseEntity<Object> autenticar(Credencial payload){
+        payload.setPassword(hashingService.toSHA256(payload.getPassword()));
+        return autenticacaoDAO.autenticar(payload);
     }
 
 }

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/matricula")
+@RequestMapping(value = "api/matricula")
 public class MatriculaController {
 
     @Autowired

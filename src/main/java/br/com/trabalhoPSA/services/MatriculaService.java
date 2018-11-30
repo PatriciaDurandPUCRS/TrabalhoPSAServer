@@ -5,6 +5,8 @@ import br.com.trabalhoPSA.entity.Turma;
 import br.com.trabalhoPSA.repository.HistoricoDAO;
 import br.com.trabalhoPSA.repository.RequisitoDAO;
 import br.com.trabalhoPSA.repository.TurmaDAO;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +16,8 @@ import java.util.*;
 
 @Service
 public class MatriculaService {
+
+    private static Logger log = LogManager.getLogger(HashingService.class);
 
     @Autowired
     TurmaDAO turmaDAO;
@@ -54,7 +58,8 @@ public class MatriculaService {
             }
             status = HttpStatus.OK;
         } catch (Exception e) {
-            System.out.println(e);
+            log.error("Exceção: NoSuchAlgorithmException na senha: ");
+            log.error("[" + e.getLocalizedMessage() + "]");
         }
         return new ResponseEntity(listaTurmaDisponiveis, BaseService.getHeders(), status);
     }
@@ -75,7 +80,8 @@ public class MatriculaService {
         try {
             listCodcred = historicoDAO.listar(matricula);
         } catch (Exception e) {
-            System.out.println("Não foi possível buscar a lista de cadeiras concluídas!");
+            log.error("Não foi possível buscar a lista de cadeiras concluídas!");
+            log.error("[" + e.getLocalizedMessage() + "]");
         }
 
         return new HashSet<String>(listCodcred);

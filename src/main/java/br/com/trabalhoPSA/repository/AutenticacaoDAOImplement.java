@@ -2,7 +2,12 @@ package br.com.trabalhoPSA.repository;
 
 import br.com.trabalhoPSA.entity.Credencial;
 import br.com.trabalhoPSA.mapper.AutenticacaoMapper;
+import br.com.trabalhoPSA.services.HashingService;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,6 +17,8 @@ import javax.sql.DataSource;
 @Repository("AuthenticateDAO")
 @Transactional
 public class AutenticacaoDAOImplement implements AutenticacaoDAO {
+
+    private static Logger log = LogManager.getLogger(HashingService.class);
 
     @Autowired
     private DataSource dataSource;
@@ -23,16 +30,21 @@ public class AutenticacaoDAOImplement implements AutenticacaoDAO {
     }
 
     @Override
-    public boolean autenticar(Credencial credencial) {
+    public ResponseEntity<Object> autenticar(Credencial credencial) {
         setDataSource();
+        HttpStatus status = null;
+
+        System.out.println(credencial.toString());
+
         try {
             String SQL = "SELECT * FROM LOGIN WHERE `USER` = ?";
             Credencial login = jdbcTemplateObject.queryForObject(SQL, new Object[]{credencial.getUser()}, new AutenticacaoMapper());
-            return (login.getPassword().equals(credencial.getPassword()));
+            status = (login.getPassword().equals(credencial.getPassword())) ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
         } catch (Exception e) {
-            System.out.println(e);
-            return false;
+            log.error("Exceção: NoSuchAlgorithmException na senha: ");
+            log.error("[" + e.getLocalizedMessage() + "]");
         }
+        return new ResponseEntity<>(status);
     }
 
 //    @Override

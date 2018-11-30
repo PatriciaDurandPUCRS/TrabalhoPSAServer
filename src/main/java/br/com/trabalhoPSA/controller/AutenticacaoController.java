@@ -7,14 +7,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(value = "/autenticacao")
+@RequestMapping(value = "api/autenticacao")
 public class AutenticacaoController {
 
     @Autowired
     public AutenticacaoService autenticacaoService;
 
     @PostMapping("/")
-    public ResponseEntity<Credencial> autenticar(@RequestBody Credencial payload){
+    public ResponseEntity<Object> autenticar(@RequestBody Credencial payload){
         return autenticacaoService.autenticar(payload);
     }
 
