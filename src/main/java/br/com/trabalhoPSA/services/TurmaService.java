@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 @Service
-public class MatriculaService {
+public class TurmaService {
 
     private static Logger log = LogManager.getLogger(HashingService.class);
 
@@ -28,11 +28,8 @@ public class MatriculaService {
     @Autowired
     RequisitoDAO requisitoDAO;
 
-    public ResponseEntity<List<Turma>> listarTurmasDisponiveis() {
-        List<Turma> listaTurmas = turmaDAO.listar();
-        HttpStatus status = listaTurmas.size() > 0 ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
-
-        return new ResponseEntity(listaTurmas, BaseService.getHeders(), status);
+    public ResponseEntity<List<Turma>> listarTurmasDetalhe(String disciplina) {
+        return turmaDAO.listar(disciplina);
     }
 
     public ResponseEntity<List<Turma>> listarTurmasDisponiveis(String matricula) {

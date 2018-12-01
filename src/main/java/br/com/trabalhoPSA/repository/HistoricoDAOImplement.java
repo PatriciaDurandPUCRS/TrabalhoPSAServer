@@ -32,7 +32,7 @@ public class HistoricoDAOImplement implements HistoricoDAO {
         List<String> historicoAluno = null;
 
         try {
-            String SQL = "SELECT codcred FROM HISTORICO where matricula=?";
+            String SQL = "SELECT CODCRED FROM HISTORICO where MATRICULA = ?";
             historicoAluno = jdbcTemplateObject.queryForList(SQL, new Object[]{matricula}, String.class);
         } catch (Exception e) {
             log.error("Exceção: NoSuchAlgorithmException na senha: ");
