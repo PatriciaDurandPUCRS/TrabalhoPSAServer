@@ -1,10 +1,13 @@
 package br.com.trabalhoPSA.repository;
 
 import br.com.trabalhoPSA.entity.Credencial;
+import br.com.trabalhoPSA.entity.Permissao;
 import br.com.trabalhoPSA.entity.Usuario;
 import br.com.trabalhoPSA.mapper.UsuarioMapper;
 import br.com.trabalhoPSA.services.BaseService;
 import br.com.trabalhoPSA.services.HashingService;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +17,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.sql.DataSource;
 
@@ -36,18 +41,18 @@ public class AutenticacaoDAOImplement implements AutenticacaoDAO {
     public ResponseEntity<Object> autenticar(Credencial credencial) {
         setDataSource();
         HttpStatus status = null;
-        HttpHeaders heders = BaseService.getHeders();
+        Permissao body = new Permissao();
 
         try {
             String SQL = "SELECT * FROM USUARIO WHERE MATRICULA = ?";
             Usuario login = jdbcTemplateObject.queryForObject(SQL, new Object[]{credencial.getUsuario()}, new UsuarioMapper());
             status = (login.getSenha().equals(credencial.getSenha())) ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
-            heders.set("role", login.getPermissao());
+            body.setPermissao(login.getPermissao());
         } catch (Exception e) {
             log.error("Ocorreu um erro ao realizar o login.");
             log.error("[" + e.getLocalizedMessage() + "]");
         }
-        return new ResponseEntity<>(heders, status);
+        return new ResponseEntity<>(body, BaseService.getHeaders(),status);
     }
 
 //    @Override
@@ -61,7 +66,7 @@ public class AutenticacaoDAOImplement implements AutenticacaoDAO {
 //            System.out.println(e);
 //            status = HttpStatus.BAD_REQUEST;
 //        }
-//        return new ResponseEntity(null, BaseService.getHeders(), HttpStatus.OK);
+//        return new ResponseEntity(null, BaseService.getHeaders(), HttpStatus.OK);
 //    }
 
 //    @Override

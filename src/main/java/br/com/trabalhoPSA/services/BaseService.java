@@ -4,7 +4,7 @@ import org.springframework.http.HttpHeaders;
 
 public class BaseService {
 
-    public static HttpHeaders getHeders() {
+    public static HttpHeaders getHeaders() {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Content-Type", "application/json");
 

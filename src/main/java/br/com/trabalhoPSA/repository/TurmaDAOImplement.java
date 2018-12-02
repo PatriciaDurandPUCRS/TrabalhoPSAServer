@@ -62,7 +62,7 @@ public class TurmaDAOImplement implements TurmaDAO {
             log.error("[" + e.getLocalizedMessage() + "]");
         }
 
-        return new ResponseEntity<List<Turma>>(turma, BaseService.getHeders(), status);
+        return new ResponseEntity<List<Turma>>(turma, BaseService.getHeaders(), status);
     }
 
 }

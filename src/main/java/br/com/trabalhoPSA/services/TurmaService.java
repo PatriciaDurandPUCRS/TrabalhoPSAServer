@@ -58,7 +58,7 @@ public class TurmaService {
             log.error(String.format("Ocorreu um erro ao buscar a lista de turmas disponíveis para a matrícula %s", matricula));
             log.error("[" + e.getLocalizedMessage() + "]");
         }
-        return new ResponseEntity(listaTurmaDisponiveis, BaseService.getHeders(), status);
+        return new ResponseEntity(listaTurmaDisponiveis, BaseService.getHeaders(), status);
     }
 
     private Map<String, Set<String>> getMapPreRequisitos() {
