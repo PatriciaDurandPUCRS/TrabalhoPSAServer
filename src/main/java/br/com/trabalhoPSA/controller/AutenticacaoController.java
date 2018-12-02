@@ -14,8 +14,8 @@ public class AutenticacaoController {
     public AutenticacaoService autenticacaoService;
 
     @PostMapping("/")
-    public ResponseEntity<Object> autenticar(@RequestBody Credencial payload){
-        return autenticacaoService.autenticar(payload);
+    public ResponseEntity<Object> autenticar(@RequestBody Credencial credencial){
+        return autenticacaoService.autenticar(credencial);
     }
 
 }

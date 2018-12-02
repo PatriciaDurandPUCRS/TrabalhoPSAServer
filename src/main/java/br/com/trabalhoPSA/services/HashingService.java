@@ -34,7 +34,7 @@ public class HashingService {
         }
         catch(Exception e)
         {
-            log.error("Exceção: NoSuchAlgorithmException na senha: ");
+            log.error("Ocorreu um erro ao gerar o hash da senha.");
             log.error("[" + e.getLocalizedMessage() + "]");
         }
         return encryptedPassword;

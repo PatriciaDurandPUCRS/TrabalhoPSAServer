@@ -2,31 +2,31 @@ package br.com.trabalhoPSA.entity;
 
 public class Credencial {
 
-    public String user;
+    public String usuario;
 
-    public String password;
+    public String senha;
 
-    public String getUser() {
-        return user;
+    public String getUsuario() {
+        return usuario;
     }
 
-    public void setUser(String user) {
-        this.user = user;
+    public void setUsuario(String usuario) {
+        this.usuario = usuario;
     }
 
-    public String getPassword() {
-        return password;
+    public String getSenha() {
+        return senha;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setSenha(String senha) {
+        this.senha = senha;
     }
 
     @Override
     public String toString() {
         return "Credencial{" +
-                "user='" + user + '\'' +
-                ", password='" + password + '\'' +
+                "usuario='" + usuario + '\'' +
+                ", senha='" + senha + '\'' +
                 '}';
     }
 }

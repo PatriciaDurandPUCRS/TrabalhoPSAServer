@@ -40,7 +40,7 @@ public class TurmaDAOImplement implements TurmaDAO {
             String SQL = "SELECT * FROM TURMA";
             turma = jdbcTemplateObject.query(SQL, new TurmaMapper());
         } catch (Exception e) {
-            log.error("Exceção: Não foi possível buscar a lista de turmas");
+            log.error("Ocorreu um erro ao buscar a lista de turmas disponíveis.");
             log.error("[" + e.getLocalizedMessage() + "]");
         }
 
@@ -58,7 +58,7 @@ public class TurmaDAOImplement implements TurmaDAO {
             turma = jdbcTemplateObject.query(SQL, new Object[]{"%"+disciplina+"%", disciplina}, new TurmaMapper());
             status = HttpStatus.OK;
         } catch (Exception e) {
-            log.error("Exceção: Não foi possível buscar disciplina!");
+            log.error(String.format("Ocorreu um erro ao buscar a disciplina %s", disciplina));
             log.error("[" + e.getLocalizedMessage() + "]");
         }
 

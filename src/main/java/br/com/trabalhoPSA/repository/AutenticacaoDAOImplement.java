@@ -1,7 +1,8 @@
 package br.com.trabalhoPSA.repository;
 
 import br.com.trabalhoPSA.entity.Credencial;
-import br.com.trabalhoPSA.mapper.AutenticacaoMapper;
+import br.com.trabalhoPSA.entity.Usuario;
+import br.com.trabalhoPSA.mapper.UsuarioMapper;
 import br.com.trabalhoPSA.services.HashingService;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -37,11 +38,11 @@ public class AutenticacaoDAOImplement implements AutenticacaoDAO {
         System.out.println(credencial.toString());
 
         try {
-            String SQL = "SELECT * FROM LOGIN WHERE `USER` = ?";
-            Credencial login = jdbcTemplateObject.queryForObject(SQL, new Object[]{credencial.getUser()}, new AutenticacaoMapper());
-            status = (login.getPassword().equals(credencial.getPassword())) ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
+            String SQL = "SELECT * FROM USUARIO WHERE MATRICULA = ?";
+            Usuario login = jdbcTemplateObject.queryForObject(SQL, new Object[]{credencial.getUsuario()}, new UsuarioMapper());
+            status = (login.getSenha().equals(credencial.getSenha())) ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
         } catch (Exception e) {
-            log.error("Exceção: NoSuchAlgorithmException na senha: ");
+            log.error("Ocorreu um erro ao realizar o login.");
             log.error("[" + e.getLocalizedMessage() + "]");
         }
         return new ResponseEntity<>(status);

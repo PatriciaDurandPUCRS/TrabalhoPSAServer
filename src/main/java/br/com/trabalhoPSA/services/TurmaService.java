@@ -55,7 +55,7 @@ public class TurmaService {
             }
             status = HttpStatus.OK;
         } catch (Exception e) {
-            log.error("Exceção: NoSuchAlgorithmException na senha: ");
+            log.error(String.format("Ocorreu um erro ao buscar a lista de turmas disponíveis para a matrícula %s", matricula));
             log.error("[" + e.getLocalizedMessage() + "]");
         }
         return new ResponseEntity(listaTurmaDisponiveis, BaseService.getHeders(), status);
@@ -77,7 +77,7 @@ public class TurmaService {
         try {
             listCodcred = historicoDAO.listar(matricula);
         } catch (Exception e) {
-            log.error("Não foi possível buscar a lista de cadeiras concluídas!");
+            log.error("Ocorreu um erro ao buscar a lista de cadeiras concluídas!");
             log.error("[" + e.getLocalizedMessage() + "]");
         }
 

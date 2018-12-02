@@ -37,7 +37,7 @@ public class RequisitoDAOImplement implements RequisitoDAO {
             String SQL = "SELECT * FROM REQUISITO";
             requisitos = jdbcTemplateObject.query(SQL, new RequisitoMapper());
         } catch (Exception e) {
-            log.error("Exceção: NoSuchAlgorithmException na senha: ");
+            log.error("Ocorreu um erro ao buscar a lista de requisitos.");
             log.error("[" + e.getLocalizedMessage() + "]");
         }
 

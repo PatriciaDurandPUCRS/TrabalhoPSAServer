@@ -16,9 +16,9 @@ public class AutenticacaoService {
     @Autowired
     private HashingService hashingService;
 
-    public ResponseEntity<Object> autenticar(Credencial payload){
-        payload.setPassword(hashingService.toSHA256(payload.getPassword()));
-        return autenticacaoDAO.autenticar(payload);
+    public ResponseEntity<Object> autenticar(Credencial credencial){
+        credencial.setSenha(hashingService.toSHA256(credencial.getSenha()));
+        return autenticacaoDAO.autenticar(credencial);
     }
 
 }
