@@ -1,6 +1,5 @@
 package br.com.trabalhoPSA.controller;
 
-import br.com.trabalhoPSA.entity.Historico;
 import br.com.trabalhoPSA.entity.HistoricoTurma;
 import br.com.trabalhoPSA.entity.Turma;
 import br.com.trabalhoPSA.services.MatriculaService;
@@ -26,6 +25,12 @@ public class MatriculaController {
     @GetMapping("/matricula/{matricula}")
     public ResponseEntity<List<Turma>> buscarTurmaMatricula(@PathVariable("matricula") String matricula){
         return matriculaService.listarTurmasDisponiveis(matricula);
+    }
+
+    @PostMapping("/matricula/{matricula}")
+    public ResponseEntity<List<HistoricoTurma>> adicionarTurma(@RequestBody Turma turma,
+                                                      @PathVariable("matricula") String matricula){
+        return matriculaService.adicionarTurma(turma, matricula);
     }
 
     @GetMapping("/ocupacao")

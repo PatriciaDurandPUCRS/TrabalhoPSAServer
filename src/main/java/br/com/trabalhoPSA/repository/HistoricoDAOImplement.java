@@ -2,6 +2,7 @@ package br.com.trabalhoPSA.repository;
 
 import br.com.trabalhoPSA.entity.Historico;
 import br.com.trabalhoPSA.entity.HistoricoTurma;
+import br.com.trabalhoPSA.entity.Turma;
 import br.com.trabalhoPSA.mapper.HistoricoTurmaMapper;
 import br.com.trabalhoPSA.services.BaseService;
 import br.com.trabalhoPSA.services.HashingService;
@@ -12,20 +13,27 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import javax.sql.DataSource;
 import java.util.List;
 
 @Repository("HistoricoDAO")
-@Transactional
+@Transactional(rollbackFor = Exception.class)
 public class HistoricoDAOImplement implements HistoricoDAO {
 
     private static Logger log = LogManager.getLogger(HashingService.class);
 
     @Autowired
     private DataSource dataSource;
+
     private JdbcTemplate jdbcTemplateObject;
+
+    @Autowired
+    private PlatformTransactionManager platformTransactionManager;
 
     @Override
     public void setDataSource() {
@@ -89,4 +97,54 @@ public class HistoricoDAOImplement implements HistoricoDAO {
 
         return new ResponseEntity<>(historicoAluno, BaseService.getHeaders(), status);
     }
+
+    @Override
+    public ResponseEntity<List<HistoricoTurma>> listarDisciplinasMatriculadas(String matricula) {
+        setDataSource();
+        List<HistoricoTurma> historicoAluno = null;
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+
+        try {
+            String SQL = "SELECT * FROM HISTORICO\n" +
+                    "        INNER JOIN TURMA ON HISTORICO.CODCRED = TURMA.CODCRED\n" +
+                    "                         AND HISTORICO.TURMA = TURMA.TURMA\n"+
+                    "        where STATUS = 'MAT' AND MATRICULA = ?";
+            historicoAluno = jdbcTemplateObject.query(SQL, new Object[]{matricula}, new HistoricoTurmaMapper());
+            status = HttpStatus.OK;
+        } catch (Exception e) {
+            log.error(String.format("Ocorreu um erro ao buscar o histórico da matricula %s", matricula));
+            log.error("[" + e.getLocalizedMessage() + "]");
+        }
+
+        return new ResponseEntity<>(historicoAluno, BaseService.getHeaders(), status);
+    }
+
+    @Override
+    public ResponseEntity<List<HistoricoTurma>> adicionarTurma(Turma turma, String matricula) {
+        setDataSource();
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+
+        DefaultTransactionDefinition paramTransactionDefinition = new DefaultTransactionDefinition();
+        TransactionStatus transactionStatus = platformTransactionManager.getTransaction(paramTransactionDefinition );
+
+        try {
+            String SQLInsert = "INSERT INTO HISTORICO (MATRICULA, CODCRED, STATUS, TURMA) VALUES (?, ?, ?, ?)";
+            jdbcTemplateObject.update(SQLInsert, matricula, turma.getCodCred(), "MAT", turma.getTurma());
+
+            int vagas = turma.getQtdDisponivel() - 1;
+
+            String SQLUpdate = "UPDATE TURMA SET QTDDISPONIVEL = ? WHERE CODCRED = ?";
+            jdbcTemplateObject.update(SQLUpdate, vagas, turma.getCodCred());
+
+            status = HttpStatus.OK;
+            platformTransactionManager.commit(transactionStatus);
+        } catch (Exception e) {
+            platformTransactionManager.rollback(transactionStatus);
+            log.error(String.format("Ocorreu um erro ao buscar o histórico da matricula %s", matricula));
+            log.error("[" + e.getLocalizedMessage() + "]");
+        }
+
+        return new ResponseEntity<>(null, BaseService.getHeaders(), status);
+    }
+
 }

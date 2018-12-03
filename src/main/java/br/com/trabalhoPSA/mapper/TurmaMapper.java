@@ -13,8 +13,9 @@ public class TurmaMapper implements RowMapper<Turma> {
         turma.setCodCred(rs.getString(1));
         turma.setTurma(rs.getString(2));
         turma.setDisciplina(rs.getString(3));
-        turma.setQtd(rs.getString(4));
-        turma.setHorario(rs.getString(5));
+        turma.setQtdTotal(rs.getInt(4));
+        turma.setQtdDisponivel(rs.getInt(5));
+        turma.setHorario(rs.getString(6));
         return turma;
     }
 

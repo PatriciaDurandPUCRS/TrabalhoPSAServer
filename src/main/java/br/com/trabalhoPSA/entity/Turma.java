@@ -8,12 +8,11 @@ public class Turma {
 
     private String disciplina;
 
-    private String qtd;
+    private int qtdTotal;
+
+    private int qtdDisponivel;
 
     private String horario;
-
-    public Turma() {
-    }
 
     public String getCodCred() {
         return codCred;
@@ -39,12 +38,20 @@ public class Turma {
         this.disciplina = disciplina;
     }
 
-    public String getQtd() {
-        return qtd;
+    public int getQtdTotal() {
+        return qtdTotal;
     }
 
-    public void setQtd(String qtd) {
-        this.qtd = qtd;
+    public void setQtdTotal(int qtdTotal) {
+        this.qtdTotal = qtdTotal;
+    }
+
+    public int getQtdDisponivel() {
+        return qtdDisponivel;
+    }
+
+    public void setQtdDisponivel(int qtdDisponivel) {
+        this.qtdDisponivel = qtdDisponivel;
     }
 
     public String getHorario() {
@@ -61,7 +68,8 @@ public class Turma {
                 "codCred='" + codCred + '\'' +
                 ", turma='" + turma + '\'' +
                 ", disciplina='" + disciplina + '\'' +
-                ", qtd='" + qtd + '\'' +
+                ", qtdTotal='" + qtdTotal + '\'' +
+                ", qtdDisponivel='" + qtdDisponivel + '\'' +
                 ", horario='" + horario + '\'' +
                 '}';
     }

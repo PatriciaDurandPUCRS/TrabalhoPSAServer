@@ -15,8 +15,9 @@ public class HistoricoTurmaMapper implements RowMapper<HistoricoTurma> {
         historicoTurma.setStatus(rs.getString(3));
         historicoTurma.setTurma(rs.getInt(6));
         historicoTurma.setDisciplina(rs.getString(7));
-        historicoTurma.setQtd(rs.getString(8));
-        historicoTurma.setHorario(rs.getString(9));
+        historicoTurma.setQtdTotal(rs.getInt(8));
+        historicoTurma.setQtdDisponivel(rs.getInt(9));
+        historicoTurma.setHorario(rs.getString(10));
         return historicoTurma;
     }
 

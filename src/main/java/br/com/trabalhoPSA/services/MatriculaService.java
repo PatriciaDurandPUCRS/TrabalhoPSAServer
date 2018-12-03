@@ -1,6 +1,5 @@
 package br.com.trabalhoPSA.services;
 
-import br.com.trabalhoPSA.entity.Historico;
 import br.com.trabalhoPSA.entity.HistoricoTurma;
 import br.com.trabalhoPSA.entity.Requisito;
 import br.com.trabalhoPSA.entity.Turma;
@@ -44,6 +43,37 @@ public class MatriculaService {
 
     public ResponseEntity<List<HistoricoTurma>> buscarHistoricoMatriculados(String matricula) {
         return historicoDAO.listarHistoricoPorMatricula(matricula);
+    }
+
+    public ResponseEntity<List<HistoricoTurma>> adicionarTurma(Turma turma, String matricula) {
+        ResponseEntity<List<HistoricoTurma>> disciplinasMatriculadasEntity = historicoDAO.listarDisciplinasMatriculadas(matricula);
+        List<HistoricoTurma> disciplinasMatriculadas = disciplinasMatriculadasEntity.getBody();
+
+        boolean adiciona = true;
+
+        String[] horario = turma.getHorario().split(" ");
+        if(disciplinasMatriculadas.size() > 0) {
+            for (HistoricoTurma disciplina : disciplinasMatriculadas) {
+                if(!disciplina.getCodCred().equals(turma.getCodCred())) {
+                    for (String h : horario) {
+                        if(disciplina.getHorario().contains(h)) {
+                            adiciona = false;
+                            break;
+                        }
+                    }
+                    if(adiciona) {
+                        historicoDAO.adicionarTurma(turma, matricula);
+                        adiciona = true;
+                    }
+                } else {
+                    log.error("Disciplina matriculada.");
+                    return new ResponseEntity<>(null, BaseService.getHeaders(), HttpStatus.BAD_REQUEST);
+                }
+            }
+        } else {
+            return historicoDAO.adicionarTurma(turma, matricula);
+        }
+        return new ResponseEntity<>(null, BaseService.getHeaders(), HttpStatus.BAD_REQUEST);
     }
 
     public ResponseEntity<List<Turma>> listarTurmasDisponiveis(String matricula) {
