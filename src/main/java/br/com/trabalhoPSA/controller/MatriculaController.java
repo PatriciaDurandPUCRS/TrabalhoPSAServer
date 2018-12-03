@@ -48,6 +48,11 @@ public class MatriculaController {
         return matriculaService.buscarHistoricoMatriculados(matricula);
     }
 
+    @GetMapping("/grade/{matricula}")
+    public ResponseEntity<List<HistoricoTurma>> buscarGradeMatricula(@PathVariable("matricula") String matricula){
+        return matriculaService.buscarGrade(matricula);
+    }
+
 }
 
 

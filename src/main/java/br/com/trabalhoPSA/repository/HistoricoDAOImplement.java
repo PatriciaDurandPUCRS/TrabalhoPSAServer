@@ -44,6 +44,27 @@ public class HistoricoDAOImplement implements HistoricoDAO {
     }
 
     @Override
+    public ResponseEntity<List<HistoricoTurma>> buscarGrade(String matricula) {
+        setDataSource();
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        List<HistoricoTurma> matriculados = null;
+
+        try {
+            String SQL = "SELECT * FROM HISTORICO\n" +
+                    "        INNER JOIN TURMA ON HISTORICO.CODCRED = TURMA.CODCRED\n" +
+                    "                         AND HISTORICO.TURMA = TURMA.TURMA\n"+
+                    "        where STATUS = 'MAT' AND MATRICULA = ?";
+            matriculados = jdbcTemplateObject.query(SQL, new Object[]{matricula}, new HistoricoTurmaMapper());
+            status = HttpStatus.OK;
+        } catch (Exception e) {
+            log.error(String.format("Ocorreu um erro ao buscar a grade com as cadeiras matriculadas do aluno %s", matricula));
+            log.error("[" + e.getLocalizedMessage() + "]");
+        }
+
+        return new ResponseEntity<>(matriculados, BaseService.getHeaders(), status);
+    }
+
+    @Override
     public ResponseEntity<List<HistoricoTurma>> listarAlunosMatriculados(String disciplina) {
         setDataSource();
         HttpStatus status = HttpStatus.BAD_REQUEST;

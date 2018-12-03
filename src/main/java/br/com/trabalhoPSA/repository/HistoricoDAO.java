@@ -20,6 +20,6 @@ public interface HistoricoDAO {
 
     ResponseEntity<List<HistoricoTurma>> adicionarTurma(Turma turma, String matricula);
 
-
+    ResponseEntity<List<HistoricoTurma>> buscarGrade(String matricula);
 
 }

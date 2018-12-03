@@ -45,6 +45,10 @@ public class MatriculaService {
         return historicoDAO.listarHistoricoPorMatricula(matricula);
     }
 
+    public ResponseEntity<List<HistoricoTurma>> buscarGrade(String matricula) {
+        return historicoDAO.buscarGrade(matricula);
+    }
+
     public ResponseEntity<List<HistoricoTurma>> adicionarTurma(Turma turma, String matricula) {
         int qtd = turmaDAO.buscaQtdVagasDisponiveis(turma.getCodCred());
 
