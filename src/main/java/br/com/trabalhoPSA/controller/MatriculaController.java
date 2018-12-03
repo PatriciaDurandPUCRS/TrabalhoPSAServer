@@ -27,10 +27,16 @@ public class MatriculaController {
         return matriculaService.listarTurmasDisponiveis(matricula);
     }
 
-    @PostMapping("/matricula/{matricula}")
+    @PostMapping("/matricula/adicionar/{matricula}")
     public ResponseEntity<List<HistoricoTurma>> adicionarTurma(@RequestBody Turma turma,
-                                                      @PathVariable("matricula") String matricula){
+                                                                @PathVariable("matricula") String matricula){
         return matriculaService.adicionarTurma(turma, matricula);
+    }
+
+    @PostMapping("/matricula/excluir/{matricula}")
+    public ResponseEntity<List<HistoricoTurma>> excluirTurma(@RequestBody Turma turma,
+                                                             @PathVariable("matricula") String matricula){
+        return matriculaService.excluirTurma(turma, matricula);
     }
 
     @GetMapping("/ocupacao")

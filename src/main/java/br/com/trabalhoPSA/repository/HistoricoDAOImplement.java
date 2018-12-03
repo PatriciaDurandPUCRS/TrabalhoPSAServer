@@ -164,7 +164,35 @@ public class HistoricoDAOImplement implements HistoricoDAO {
             platformTransactionManager.commit(transactionStatus);
         } catch (Exception e) {
             platformTransactionManager.rollback(transactionStatus);
-            log.error(String.format("Ocorreu um erro ao buscar o histórico da matricula %s", matricula));
+            log.error(String.format("Ocorreu um erro ao adicionar a cadeira na grade do aluno %s", matricula));
+            log.error("[" + e.getLocalizedMessage() + "]");
+        }
+
+        return new ResponseEntity<>(null, BaseService.getHeaders(), status);
+    }
+
+    @Override
+    public ResponseEntity<List<HistoricoTurma>> excluirTurma(Turma turma, String matricula) {
+        setDataSource();
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+
+        DefaultTransactionDefinition paramTransactionDefinition = new DefaultTransactionDefinition();
+        TransactionStatus transactionStatus = platformTransactionManager.getTransaction(paramTransactionDefinition );
+
+        try {
+            String SQLInsert = "DELETE FROM HISTORICO WHERE MATRICULA = ? AND CODCRED = ?";
+            jdbcTemplateObject.update(SQLInsert, matricula, turma.getCodCred());
+
+            int vagas = turmaDAO.buscaQtdVagasDisponiveis(turma.getCodCred()) +1;
+
+            String SQLUpdate = "UPDATE TURMA SET QTDDISPONIVEL = ? WHERE CODCRED = ?";
+            jdbcTemplateObject.update(SQLUpdate, vagas, turma.getCodCred());
+
+            status = HttpStatus.OK;
+            platformTransactionManager.commit(transactionStatus);
+        } catch (Exception e) {
+            platformTransactionManager.rollback(transactionStatus);
+            log.error(String.format("Ocorreu um erro ao excluir a cadeira da grade do aluno %s", matricula));
             log.error("[" + e.getLocalizedMessage() + "]");
         }
 

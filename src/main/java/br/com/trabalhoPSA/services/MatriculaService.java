@@ -83,6 +83,23 @@ public class MatriculaService {
         return new ResponseEntity<>(null, BaseService.getHeaders(), HttpStatus.BAD_REQUEST);
     }
 
+    public ResponseEntity<List<HistoricoTurma>> excluirTurma(Turma turma, String matricula) {
+        ResponseEntity<List<HistoricoTurma>> disciplinasMatriculadasEntity = historicoDAO.listarDisciplinasMatriculadas(matricula);
+        List<HistoricoTurma> disciplinasMatriculadas = disciplinasMatriculadasEntity.getBody();
+
+        if (disciplinasMatriculadas.size() > 0) {
+            for (HistoricoTurma disciplina : disciplinasMatriculadas) {
+                if (disciplina.getCodCred().equals(turma.getCodCred())) {
+                    return historicoDAO.excluirTurma(turma, matricula);
+                } else {
+                    log.error("Disciplina não matriculada.");
+                    return new ResponseEntity<>(null, BaseService.getHeaders(), HttpStatus.BAD_REQUEST);
+                }
+            }
+        }
+        return new ResponseEntity<>(null, BaseService.getHeaders(), HttpStatus.BAD_REQUEST);
+    }
+
     public ResponseEntity<List<Turma>> listarTurmasDisponiveis(String matricula) {
         HttpStatus status = HttpStatus.BAD_REQUEST;
         List<Turma> listaTurmaDisponiveis = new ArrayList<>();
