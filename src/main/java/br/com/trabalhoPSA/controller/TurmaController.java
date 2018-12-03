@@ -25,6 +25,16 @@ public class TurmaController {
         return turmaService.listarTurmasDisponiveis(matricula);
     }
 
+    @GetMapping("/ocupacao")
+    public ResponseEntity<List<Turma>> buscarTurmaOcupacao(){
+        return turmaService.listarTodasTurmas();
+    }
+
+    @GetMapping("/matriculados")
+    public ResponseEntity<List<Turma>> buscarAlunosMatriculados(@RequestParam("disciplina") String disciplina){
+        return turmaService.listarAlunosMatriculados();
+    }
+
 }
 
 

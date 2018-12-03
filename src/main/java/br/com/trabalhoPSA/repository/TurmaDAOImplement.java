@@ -32,7 +32,14 @@ public class TurmaDAOImplement implements TurmaDAO {
     }
 
     @Override
-    public List<Turma> listar() {
+    public ResponseEntity<List<Turma>> listarTodasTurmas() {
+        List<Turma> turmas = listarTurmas();
+        HttpStatus status = turmas.size() > 0 ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
+        return new ResponseEntity<>(turmas, BaseService.getHeaders(), status);
+    }
+
+    @Override
+    public List<Turma> listarTurmas() {
         setDataSource();
         List<Turma> turma = null;
 
@@ -48,7 +55,7 @@ public class TurmaDAOImplement implements TurmaDAO {
     }
 
     @Override
-    public ResponseEntity<List<Turma>> listar(String disciplina) {
+    public ResponseEntity<List<Turma>> listarTurmaDetalhe(String disciplina) {
         setDataSource();
         List<Turma> turma = null;
         HttpStatus status = HttpStatus.BAD_REQUEST;

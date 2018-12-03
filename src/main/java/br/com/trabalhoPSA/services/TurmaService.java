@@ -28,8 +28,16 @@ public class TurmaService {
     @Autowired
     RequisitoDAO requisitoDAO;
 
+    public ResponseEntity<List<Turma>> listarAlunosMatriculados() {
+        return turmaDAO.listarTodasTurmas();
+    }
+
     public ResponseEntity<List<Turma>> listarTurmasDetalhe(String disciplina) {
-        return turmaDAO.listar(disciplina);
+        return turmaDAO.listarTurmaDetalhe(disciplina);
+    }
+
+    public ResponseEntity<List<Turma>> listarTodasTurmas() {
+        return turmaDAO.listarTodasTurmas();
     }
 
     public ResponseEntity<List<Turma>> listarTurmasDisponiveis(String matricula) {
@@ -37,7 +45,7 @@ public class TurmaService {
         List<Turma> listaTurmaDisponiveis = new ArrayList<>();
 
         try {
-            List<Turma> listarTurmas = turmaDAO.listar();
+            List<Turma> listarTurmas = turmaDAO.listarTurmas();
             Set<String> conjCodcredConcluido  = getConjCodCredConcluido(matricula);
             Map<String, Set<String>> mapPreRequisitos = getMapPreRequisitos();
 

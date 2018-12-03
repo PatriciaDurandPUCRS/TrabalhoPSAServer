@@ -9,8 +9,10 @@ public interface TurmaDAO {
 
     void setDataSource();
 
-    List<Turma> listar();
+    List<Turma> listarTurmas();
 
-    ResponseEntity<List<Turma>> listar(String disciplina);
+    ResponseEntity<List<Turma>> listarTodasTurmas();
+
+    ResponseEntity<List<Turma>> listarTurmaDetalhe(String disciplina);
 
 }
