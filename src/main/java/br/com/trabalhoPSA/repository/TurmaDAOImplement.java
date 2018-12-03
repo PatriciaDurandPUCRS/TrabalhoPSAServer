@@ -55,6 +55,22 @@ public class TurmaDAOImplement implements TurmaDAO {
     }
 
     @Override
+    public int buscaQtdVagasDisponiveis(String codCred){
+        setDataSource();
+        Integer qtd = 0;
+
+        try {
+            String SQL = "SELECT QTDDISPONIVEL FROM TURMA where CODCRED = ?";
+            qtd = jdbcTemplateObject.queryForObject(SQL, new Object[]{codCred}, Integer.class);
+        } catch (Exception e) {
+            log.error(String.format("Ocorreu um erro ao buscar a quantidade de vagas disponíveis da disciplina %s", codCred));
+            log.error("[" + e.getLocalizedMessage() + "]");
+        }
+
+        return qtd;
+    }
+
+    @Override
     public ResponseEntity<List<Turma>> listarTurmaDetalhe(String codCred, String disciplina) {
         setDataSource();
         List<Turma> turma = null;

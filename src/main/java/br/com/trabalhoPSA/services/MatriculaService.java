@@ -46,32 +46,35 @@ public class MatriculaService {
     }
 
     public ResponseEntity<List<HistoricoTurma>> adicionarTurma(Turma turma, String matricula) {
-        ResponseEntity<List<HistoricoTurma>> disciplinasMatriculadasEntity = historicoDAO.listarDisciplinasMatriculadas(matricula);
-        List<HistoricoTurma> disciplinasMatriculadas = disciplinasMatriculadasEntity.getBody();
+        int qtd = turmaDAO.buscaQtdVagasDisponiveis(turma.getCodCred());
 
-        boolean adiciona = true;
+        if (qtd > 0) {
+            ResponseEntity<List<HistoricoTurma>> disciplinasMatriculadasEntity = historicoDAO.listarDisciplinasMatriculadas(matricula);
+            List<HistoricoTurma> disciplinasMatriculadas = disciplinasMatriculadasEntity.getBody();
 
-        String[] horario = turma.getHorario().split(" ");
-        if(disciplinasMatriculadas.size() > 0) {
-            for (HistoricoTurma disciplina : disciplinasMatriculadas) {
-                if(!disciplina.getCodCred().equals(turma.getCodCred())) {
-                    for (String h : horario) {
-                        if(disciplina.getHorario().contains(h)) {
-                            adiciona = false;
-                            break;
+            boolean adiciona = true;
+
+            String[] horario = turma.getHorario().split(" ");
+            if (disciplinasMatriculadas.size() > 0) {
+                for (HistoricoTurma disciplina : disciplinasMatriculadas) {
+                    if (!disciplina.getCodCred().equals(turma.getCodCred())) {
+                        for (String h : horario) {
+                            if (disciplina.getHorario().contains(h)) {
+                                adiciona = false;
+                                break;
+                            }
                         }
+                        if (adiciona) {
+                            return historicoDAO.adicionarTurma(turma, matricula);
+                        }
+                    } else {
+                        log.error("Disciplina matriculada.");
+                        return new ResponseEntity<>(null, BaseService.getHeaders(), HttpStatus.BAD_REQUEST);
                     }
-                    if(adiciona) {
-                        historicoDAO.adicionarTurma(turma, matricula);
-                        adiciona = true;
-                    }
-                } else {
-                    log.error("Disciplina matriculada.");
-                    return new ResponseEntity<>(null, BaseService.getHeaders(), HttpStatus.BAD_REQUEST);
                 }
+            } else {
+                return historicoDAO.adicionarTurma(turma, matricula);
             }
-        } else {
-            return historicoDAO.adicionarTurma(turma, matricula);
         }
         return new ResponseEntity<>(null, BaseService.getHeaders(), HttpStatus.BAD_REQUEST);
     }

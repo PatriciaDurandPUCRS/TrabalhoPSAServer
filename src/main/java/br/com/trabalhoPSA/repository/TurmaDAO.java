@@ -15,4 +15,6 @@ public interface TurmaDAO {
 
     ResponseEntity<List<Turma>> listarTurmaDetalhe(String codCred, String disciplina);
 
+    int buscaQtdVagasDisponiveis(String codCred);
+
 }

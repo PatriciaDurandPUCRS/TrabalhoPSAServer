@@ -35,6 +35,9 @@ public class HistoricoDAOImplement implements HistoricoDAO {
     @Autowired
     private PlatformTransactionManager platformTransactionManager;
 
+    @Autowired
+    TurmaDAO turmaDAO;
+
     @Override
     public void setDataSource() {
         this.jdbcTemplateObject = new JdbcTemplate(dataSource);
@@ -67,7 +70,7 @@ public class HistoricoDAOImplement implements HistoricoDAO {
         List<String> historicoAluno = null;
 
         try {
-            String SQL = "SELECT CODCRED FROM HISTORICO where MATRICULA = ?";
+            String SQL = "SELECT CODCRED FROM HISTORICO where MATRICULA = ? AND STATUS = 'APR'";
             historicoAluno = jdbcTemplateObject.queryForList(SQL, new Object[]{matricula}, String.class);
         } catch (Exception e) {
             log.error(String.format("Ocorreu um erro ao buscar o histórico da matricula %s", matricula));
@@ -131,7 +134,7 @@ public class HistoricoDAOImplement implements HistoricoDAO {
             String SQLInsert = "INSERT INTO HISTORICO (MATRICULA, CODCRED, STATUS, TURMA) VALUES (?, ?, ?, ?)";
             jdbcTemplateObject.update(SQLInsert, matricula, turma.getCodCred(), "MAT", turma.getTurma());
 
-            int vagas = turma.getQtdDisponivel() - 1;
+            int vagas = turmaDAO.buscaQtdVagasDisponiveis(turma.getCodCred()) -1;
 
             String SQLUpdate = "UPDATE TURMA SET QTDDISPONIVEL = ? WHERE CODCRED = ?";
             jdbcTemplateObject.update(SQLUpdate, vagas, turma.getCodCred());
