@@ -1,6 +1,7 @@
 package br.com.trabalhoPSA.controller;
 
 import br.com.trabalhoPSA.entity.Credencial;
+import br.com.trabalhoPSA.entity.Login;
 import br.com.trabalhoPSA.services.AutenticacaoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +15,7 @@ public class AutenticacaoController {
     public AutenticacaoService autenticacaoService;
 
     @PostMapping("/")
-    public ResponseEntity<Object> autenticar(@RequestBody Credencial credencial){
+    public ResponseEntity<Login> autenticar(@RequestBody Credencial credencial){
         return autenticacaoService.autenticar(credencial);
     }
 

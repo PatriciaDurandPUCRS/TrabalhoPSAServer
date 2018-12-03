@@ -1,6 +1,7 @@
 package br.com.trabalhoPSA.services;
 
 import br.com.trabalhoPSA.entity.Credencial;
+import br.com.trabalhoPSA.entity.Login;
 import br.com.trabalhoPSA.repository.AutenticacaoDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,7 +17,7 @@ public class AutenticacaoService {
     @Autowired
     private HashingService hashingService;
 
-    public ResponseEntity<Object> autenticar(Credencial credencial){
+    public ResponseEntity<Login> autenticar(Credencial credencial){
         credencial.setSenha(hashingService.toSHA256(credencial.getSenha()));
         return autenticacaoDAO.autenticar(credencial);
     }

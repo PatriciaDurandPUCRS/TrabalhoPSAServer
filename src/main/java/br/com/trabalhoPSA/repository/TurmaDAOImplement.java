@@ -55,14 +55,15 @@ public class TurmaDAOImplement implements TurmaDAO {
     }
 
     @Override
-    public ResponseEntity<List<Turma>> listarTurmaDetalhe(String disciplina) {
+    public ResponseEntity<List<Turma>> listarTurmaDetalhe(String codCred, String disciplina) {
         setDataSource();
         List<Turma> turma = null;
         HttpStatus status = HttpStatus.BAD_REQUEST;
+        if (disciplina.equals("")) disciplina = null;
 
         try {
-            String SQL = "SELECT * FROM TURMA where DISCIPLINA LIKE ? OR CODCRED = ?";
-            turma = jdbcTemplateObject.query(SQL, new Object[]{"%"+disciplina+"%", disciplina}, new TurmaMapper());
+            String SQL = "SELECT * FROM TURMA where CODCRED = ? OR DISCIPLINA LIKE ?";
+            turma = jdbcTemplateObject.query(SQL, new Object[]{codCred, "%"+disciplina+"%"}, new TurmaMapper());
             status = HttpStatus.OK;
         } catch (Exception e) {
             log.error(String.format("Ocorreu um erro ao buscar a disciplina %s", disciplina));

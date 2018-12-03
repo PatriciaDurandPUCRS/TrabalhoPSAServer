@@ -1,5 +1,7 @@
 package br.com.trabalhoPSA.services;
 
+import br.com.trabalhoPSA.entity.Historico;
+import br.com.trabalhoPSA.entity.HistoricoTurma;
 import br.com.trabalhoPSA.entity.Requisito;
 import br.com.trabalhoPSA.entity.Turma;
 import br.com.trabalhoPSA.repository.HistoricoDAO;
@@ -15,7 +17,7 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 @Service
-public class TurmaService {
+public class MatriculaService {
 
     private static Logger log = LogManager.getLogger(HashingService.class);
 
@@ -28,16 +30,20 @@ public class TurmaService {
     @Autowired
     RequisitoDAO requisitoDAO;
 
-    public ResponseEntity<List<Turma>> listarAlunosMatriculados() {
-        return turmaDAO.listarTodasTurmas();
+    public ResponseEntity<List<HistoricoTurma>> listarAlunosMatriculados(String disciplina) {
+        return historicoDAO.listarAlunosMatriculados(disciplina);
     }
 
-    public ResponseEntity<List<Turma>> listarTurmasDetalhe(String disciplina) {
-        return turmaDAO.listarTurmaDetalhe(disciplina);
+    public ResponseEntity<List<Turma>> listarTurmasDetalhe(String codCred, String disciplina) {
+        return turmaDAO.listarTurmaDetalhe(codCred, disciplina);
     }
 
     public ResponseEntity<List<Turma>> listarTodasTurmas() {
         return turmaDAO.listarTodasTurmas();
+    }
+
+    public ResponseEntity<List<HistoricoTurma>> buscarHistoricoMatriculados(String matricula) {
+        return historicoDAO.listarHistoricoPorMatricula(matricula);
     }
 
     public ResponseEntity<List<Turma>> listarTurmasDisponiveis(String matricula) {
@@ -83,7 +89,7 @@ public class TurmaService {
     private Set<String> getConjCodCredConcluido(String matricula) {
         List<String> listCodcred = null;
         try {
-            listCodcred = historicoDAO.listar(matricula);
+            listCodcred = historicoDAO.listarCodCredConcluidoPorMatricula(matricula);
         } catch (Exception e) {
             log.error("Ocorreu um erro ao buscar a lista de cadeiras concluídas!");
             log.error("[" + e.getLocalizedMessage() + "]");

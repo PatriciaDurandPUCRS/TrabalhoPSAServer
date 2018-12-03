@@ -13,6 +13,6 @@ public interface TurmaDAO {
 
     ResponseEntity<List<Turma>> listarTodasTurmas();
 
-    ResponseEntity<List<Turma>> listarTurmaDetalhe(String disciplina);
+    ResponseEntity<List<Turma>> listarTurmaDetalhe(String codCred, String disciplina);
 
 }

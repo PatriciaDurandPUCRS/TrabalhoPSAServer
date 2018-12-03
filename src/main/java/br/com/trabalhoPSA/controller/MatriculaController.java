@@ -1,5 +1,7 @@
 package br.com.trabalhoPSA.controller;
 
+import br.com.trabalhoPSA.entity.Historico;
+import br.com.trabalhoPSA.entity.HistoricoTurma;
 import br.com.trabalhoPSA.entity.Turma;
 import br.com.trabalhoPSA.services.MatriculaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,14 +12,15 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "api/turma")
-public class TurmaController {
+public class MatriculaController {
 
     @Autowired
     public MatriculaService matriculaService;
 
     @GetMapping("/detalhe/")
-    public ResponseEntity<List<Turma>> buscarTurmaDetalhe(@RequestParam("disciplina") String disciplina){
-        return matriculaService.listarTurmasDetalhe(disciplina);
+    public ResponseEntity<List<Turma>> buscarTurmaDetalhe(@RequestParam(required = false) String nome,
+                                                          @RequestParam(required = false) String codCred){
+        return matriculaService.listarTurmasDetalhe(codCred, nome);
     }
 
     @GetMapping("/matricula/{matricula}")
@@ -30,9 +33,14 @@ public class TurmaController {
         return matriculaService.listarTodasTurmas();
     }
 
-    @GetMapping("/matriculados")
-    public ResponseEntity<List<Turma>> buscarAlunosMatriculados(@RequestParam("disciplina") String disciplina){
-        return matriculaService.listarAlunosMatriculados();
+    @GetMapping("/matriculados/")
+    public ResponseEntity<List<HistoricoTurma>> buscarAlunosMatriculados(@RequestParam("disciplina") String disciplina){
+        return matriculaService.listarAlunosMatriculados(disciplina);
+    }
+
+    @GetMapping("/historico/{matricula}")
+    public ResponseEntity<List<HistoricoTurma>> buscarHistoricoMatriculados(@PathVariable("matricula") String matricula){
+        return matriculaService.buscarHistoricoMatriculados(matricula);
     }
 
 }
